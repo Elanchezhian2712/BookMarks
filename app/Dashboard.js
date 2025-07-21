@@ -249,6 +249,10 @@ export default function Dashboard({ user, initialBookmarks, initialFolders }) {
             </div>
           </div>
 
+          <hr style={{ marginBottom: '1.5rem', height: '1px', border: 'none', backgroundColor: '#ccc' }} />
+
+
+
           <AnimatePresence>
             <motion.div key={selectedFolder + viewMode + searchQuery + sortOrder} variants={containerVariants} initial="hidden" animate="visible" className={viewMode === 'grid' ? 'grid-container' : 'list-container'}>
               {filteredData.visibleBookmarks.map(bookmark => (
