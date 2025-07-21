@@ -40,7 +40,7 @@ body {
 
   /* Set the background for the entire app */
   background-color: var(--aurora-bg);
-  /* background-image: url('/spiderman-bg.jpg'); */
+  background-image: url('/spiderman-bg.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed; /* Prevents the background from scrolling */
