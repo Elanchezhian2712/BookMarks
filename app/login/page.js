@@ -47,7 +47,7 @@ export default function LoginPage() {
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
 
-        <h1 className="glass-title">Log in to Elan Book Mark</h1>
+        <h1 className="glass-title">My Book Mark</h1>
         
         <form onSubmit={handleLogin}>
           <div className="glass-input-group">

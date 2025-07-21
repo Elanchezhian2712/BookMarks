@@ -676,7 +676,7 @@ body {
 .form-control:focus {
   outline: none;
   border-color: var(--aurora-glow-end);
-  box-shadow: 0 0 0 3px rgba(229, 45, 39, 0.3); /* Red focus ring */
+  box-shadow: 0 0 0 3px rgba(230, 11, 3, 0.3); /* Red focus ring */
 }
 
 /* === NEW "GLASSMORPHISM" LOGIN PAGE STYLES === */
@@ -689,7 +689,7 @@ body {
   min-height: 100vh;
   padding: 1rem;
   /* The new Spider-Man background */
-  background-image: url('/spiderman-bg.jpg'); 
+  /* background-image: url('/spiderman-bg.jpg');  */
   background-size: cover;
   background-position: center;
 }
