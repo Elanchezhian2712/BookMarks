@@ -295,31 +295,130 @@ body {
 
 
 /* --- Command Bar (Cmd+K) --- */
+/* === Find and REPLACE the old .command-bar-* styles with these === */
+
 .command-bar-overlay {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(5px);
+  background: rgba(0, 0, 0, 0.6); /* Darker overlay */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding-top: 15vh;
+  align-items: center; /* Center the modal vertically */
+  padding: 1rem;
   z-index: 1000;
 }
+
 .command-bar {
-  width: 640px;
+  width: 100%;
+  max-width: 550px; /* A good standard width for modals */
   background-color: var(--aurora-surface);
   border-radius: 12px;
   border: 1px solid var(--aurora-border);
   box-shadow: 0 10px 50px rgba(0,0,0,0.5);
   overflow: hidden;
+  /* We will use flexbox to structure the new layout */
+  display: flex;
+  flex-direction: column;
 }
-.command-bar__form { padding: 1rem; }
-.command-bar__footer {
-  padding: 0.75rem 1rem;
-  background-color: var(--aurora-bg);
-  border-top: 1px solid var(--aurora-border);
+
+/* New style for the form container */
+.command-bar__form-body {
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* New "list-item" style for inputs */
+.command-bar__input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--aurora-border);
+  padding: 1.25rem 1rem; /* Generous padding for a premium feel */
+  color: var(--aurora-text-primary);
+  font-size: 1rem;
+}
+.command-bar__input:focus {
+  outline: none;
+  border-bottom-color: var(--aurora-glow-end);
+}
+.command-bar__input::placeholder {
+  color: var(--aurora-text-secondary);
+}
+
+/* Remove border from the last input */
+.command-bar__form-body > *:last-child {
+  border-bottom: none;
+}
+
+/* New style for the action area at the bottom */
+.command-bar__actions {
+  padding: 1rem 1.5rem;
   text-align: right;
+  /* Add a top border to separate it from the form */
+  border-top: 1px solid var(--aurora-border);
 }
+
+/* New style for the red "pill" button */
+.command-bar__submit-btn {
+  background: var(--aurora-glow-start);
+  color: white;
+  border: none;
+  border-radius: 999px; /* Pill shape */
+  padding: 0.6rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.command-bar__submit-btn:hover {
+  background: var(--aurora-glow-end);
+  transform: scale(1.05);
+}
+
+
+
+/* === ADD THIS to app/globals.css === */
+
+.folder-list__item {
+  /* Add this to enable positioning of the delete button */
+  position: relative; 
+}
+
+.folder-list__delete-btn {
+  position: absolute; /* Position it within the folder item */
+  right: 0.75rem; /* Align to the right */
+  top: 50%;
+  transform: translateY(-50%);
+
+  background: none;
+  border: none;
+  color: var(--aurora-text-secondary);
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  
+  /* Hide by default */
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+/* Show the button when hovering over the folder item */
+.folder-list__item:hover .folder-list__delete-btn {
+  opacity: 0.7;
+}
+
+.folder-list__item .folder-list__delete-btn:hover {
+  opacity: 1;
+  color: #ffffff; /* A standard danger red */
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Don't show delete button for the "All Bookmarks" item */
+.folder-list__item:first-child .folder-list__delete-btn {
+  display: none;
+}
+
 
 /* --- Grid View Card with Glass Effect --- */
 .grid-container {

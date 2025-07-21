@@ -5,53 +5,56 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createClient } from '@/lib/supabase-client';
 
-
-// --- Reusable Framer Motion Variants ---
+// --- Reusable Framer Motion Variants (Unchanged) ---
 const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.05 } } };
 const itemVariants = { hidden: { y: 20, opacity: 0 }, visible: { y: 0, opacity: 1 } };
 
-
-// --- Command Bar Component (For Adding/Editing Bookmarks) ---
+// --- Command Bar Component (Unchanged) ---
 function CommandBar({ isOpen, onClose, onFormSubmit, editingBookmark }) {
-  const [title, setTitle] = useState('');
-  const [description, setDesc] = useState('');
-  const [link, setLink] = useState('');
+    const [title, setTitle] = useState('');
+    const [description, setDesc] = useState('');
+    const [link, setLink] = useState('');
 
-  useEffect(() => {
-    if (editingBookmark) {
-      setTitle(editingBookmark.title);
-      setDesc(editingBookmark.description || '');
-      setLink(editingBookmark.link || '');
-    } else {
-      setTitle(''); setDesc(''); setLink('');
-    }
-  }, [editingBookmark, isOpen]);
+    useEffect(() => {
+        if (isOpen) {
+            if (editingBookmark) {
+                setTitle(editingBookmark.title);
+                setDesc(editingBookmark.description || '');
+                setLink(editingBookmark.link || '');
+            } else {
+                setTitle('');
+                setDesc('');
+                setLink('');
+            }
+        }
+    }, [editingBookmark, isOpen]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onFormSubmit({ title, description, link });
-    onClose();
-  };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onFormSubmit({ title, description, link });
+        onClose();
+    };
 
-  if (!isOpen) return null;
+    if (!isOpen) return null;
 
-  return (
-    <AnimatePresence>
-      <motion.div className="command-bar-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
-        <motion.div className="command-bar" initial={{ y: -50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -50, opacity: 0 }} transition={{ type: 'spring', stiffness: 300, damping: 30 }} onClick={(e) => e.stopPropagation()}>
-          <h4 className="p-4 pb-0 fw-bold">{editingBookmark ? 'Edit Bookmark' : 'Add New Bookmark'}</h4>
-          <form id="bookmark-form" onSubmit={handleSubmit} className="command-bar__form">
-            <input type="text" className="form-control mb-2" placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} required autoFocus />
-            <input type="text" className="form-control mb-2" placeholder="Description (optional)" value={description} onChange={e => setDesc(e.target.value)} />
-            <input type="url" className="form-control" placeholder="URL (optional)" value={link} onChange={e => setLink(e.target.value)} />
-          </form>
-          <div className="command-bar__footer">
-            <button type="submit" form="bookmark-form" className="btn btn-primary px-3 py-2">{editingBookmark ? 'Save Changes' : 'Add Bookmark'}</button>
-          </div>
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>
-  );
+    return (
+        <AnimatePresence>
+            <motion.div className="command-bar-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
+                <motion.div className="command-bar" initial={{ y: -20, opacity: 0, scale: 0.95 }} animate={{ y: 0, opacity: 1, scale: 1 }} exit={{ y: -20, opacity: 0, scale: 0.95 }} transition={{ type: 'spring', stiffness: 400, damping: 30 }} onClick={(e) => e.stopPropagation()}>
+                    <form id="bookmark-form" onSubmit={handleSubmit}>
+                        <div className="command-bar__form-body">
+                            <input type="text" className="command-bar__input" placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} required autoFocus />
+                            <input type="text" className="command-bar__input" placeholder="Description (optional)" value={description} onChange={e => setDesc(e.target.value)} />
+                            <input type="url" className="command-bar__input" placeholder="URL (optional)" value={link} onChange={e => setLink(e.target.value)} />
+                        </div>
+                        <div className="command-bar__actions">
+                            <button type="submit" className="command-bar__submit-btn">{editingBookmark ? 'Save Changes' : 'Add Bookmark'}</button>
+                        </div>
+                    </form>
+                </motion.div>
+            </motion.div>
+        </AnimatePresence>
+    );
 }
 
 
@@ -65,25 +68,13 @@ export default function Dashboard({ user, initialBookmarks, initialFolders }) {
   const [folders, setFolders] = useState(initialFolders);
   const [selectedFolder, setSelectedFolder] = useState('all');
   const [viewMode, setViewMode] = useState('grid');
-  const [theme, setTheme] = useState('dark');
   const [isCommandOpen, setIsCommandOpen] = useState(false);
   const [editingBookmark, setEditingBookmark] = useState(null);
-
-  // *** NEW STATE FOR UNIVERSAL SEARCH ***
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState('newest');
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('aurora-theme') || 'dark';
-    setTheme(savedTheme);
-    document.documentElement.setAttribute('data-theme', savedTheme);
-  }, []);
-
-  const handleThemeChange = (newTheme) => {
-    setTheme(newTheme);
-    localStorage.setItem('aurora-theme', newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
-  };
+  // *** THE MISSING STATE IS ADDED HERE ***
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const down = (e) => {
@@ -99,7 +90,7 @@ export default function Dashboard({ user, initialBookmarks, initialFolders }) {
 
   const refreshData = async () => {
     const [bookmarksRes, foldersRes] = await Promise.all([
-      supabase.from('bookmarks').select('*').order('created_at', { ascending: false }),
+      supabase.from('bookmarks').select('*'),
       supabase.from('folders').select('*').order('name', { ascending: true })
     ]);
     setBookmarks(bookmarksRes.data || []);
@@ -117,6 +108,21 @@ export default function Dashboard({ user, initialBookmarks, initialFolders }) {
       const { data } = await supabase.from('folders').insert({ name: folderName, user_id: user.id }).select().single();
       await refreshData();
       if (data) setSelectedFolder(data.id);
+    }
+  };
+
+  const handleDeleteFolder = async (folderId, folderName) => {
+    if (window.confirm(`ARE YOU SURE?\n\nDeleting the folder "${folderName}" will also permanently delete ALL bookmarks inside it. This action cannot be undone.`)) {
+      if (selectedFolder === folderId) {
+        setSelectedFolder('all');
+      }
+      const { error } = await supabase.from('folders').delete().eq('id', folderId);
+      if (error) {
+        console.error("Error deleting folder:", error);
+        alert("Could not delete the folder.");
+      } else {
+        await refreshData();
+      }
     }
   };
 
@@ -145,46 +151,29 @@ export default function Dashboard({ user, initialBookmarks, initialFolders }) {
     await refreshData();
   };
 
-  // --- Main Filtering and Sorting Logic ---
+  // Main Filtering and Sorting Logic
   const filteredData = useMemo(() => {
     const query = searchQuery.toLowerCase().trim();
-    let intermediateBookmarks = [];
+    let intermediateBookmarks = query
+      ? bookmarks.filter(bm => bm.title.toLowerCase().includes(query) || (bm.description && bm.description.toLowerCase().includes(query)))
+      : bookmarks;
 
-    // 1. Filter by search query first (if any)
-    if (query) {
-      intermediateBookmarks = bookmarks.filter(bm =>
-        bm.title.toLowerCase().includes(query) ||
-        (bm.description && bm.description.toLowerCase().includes(query))
-      );
-    } else {
-      intermediateBookmarks = bookmarks;
-    }
+    let finalBookmarks = intermediateBookmarks.filter(bm => selectedFolder === 'all' || bm.folder_id == selectedFolder);
 
-    // 2. Filter by selected folder
-    let finalBookmarks = intermediateBookmarks.filter(bm =>
-      selectedFolder === 'all' || bm.folder_id == selectedFolder
-    );
-
-    // *** 3. SORT THE RESULTS ***
     finalBookmarks.sort((a, b) => {
       const dateA = new Date(a.created_at);
       const dateB = new Date(b.created_at);
       return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
     });
 
-    // Determine visible folders based on search
     let visibleFolders = folders;
     if (query) {
-      const matchingFolderIds = new Set(finalBookmarks.map(bm => bm.folder_id));
-      visibleFolders = folders.filter(folder =>
-        folder.name.toLowerCase().includes(query) || matchingFolderIds.has(folder.id)
-      );
+      const matchingFolderIds = new Set(intermediateBookmarks.map(bm => bm.folder_id));
+      visibleFolders = folders.filter(folder => folder.name.toLowerCase().includes(query) || matchingFolderIds.has(folder.id));
     }
 
     return { visibleFolders, visibleBookmarks: finalBookmarks };
-
-  }, [searchQuery, bookmarks, folders, selectedFolder, sortOrder]); // Add sortOrder to dependency array
-
+  }, [searchQuery, bookmarks, folders, selectedFolder, sortOrder]);
 
   const selectedFolderName = useMemo(() => {
     if (searchQuery) return `Search results for "${searchQuery}"`;
@@ -192,74 +181,50 @@ export default function Dashboard({ user, initialBookmarks, initialFolders }) {
     return folders.find(f => f.id == selectedFolder)?.name || '...';
   }, [selectedFolder, folders, searchQuery]);
 
-
-
   return (
     <>
-      <CommandBar
-        isOpen={isCommandOpen}
-        onClose={() => setIsCommandOpen(false)}
-        onFormSubmit={handleFormSubmit}
-        editingBookmark={editingBookmark}
-      />
+      <CommandBar isOpen={isCommandOpen} onClose={() => setIsCommandOpen(false)} onFormSubmit={handleFormSubmit} editingBookmark={editingBookmark} />
 
       <div className="aurora-layout">
-        {/* === Sidebar === */}
-        <aside className="sidebar">
+        <aside className={`sidebar ${isSidebarOpen ? 'sidebar--open' : ''}`}>
           <h1 className="sidebar__header fw-bold">My Bookmarks</h1>
 
-          {/* *** NEW SEARCH BAR *** */}
-          <input
-            type="search"
-            placeholder="Search all..."
-            className="sidebar__search-input"
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              // When searching, always show results from 'all' folders
-              if (e.target.value) setSelectedFolder('all');
-            }}
-          />
+          <input type="search" placeholder="Search all..." className="sidebar__search-input" value={searchQuery} onChange={(e) => {
+            setSearchQuery(e.target.value);
+            if (e.target.value) setSelectedFolder('all');
+          }} />
 
           <div className="sidebar__section">
-            <span>New Folders</span>
+            <span>Folders</span>
             <button onClick={handleAddFolder} className="btn" title="Add Folder"><i className="fas fa-plus"></i></button>
           </div>
           <ul className="folder-list">
-            {/* "All Bookmarks" is always visible, but disabled during a search */}
-            <motion.li
-              layout
-              className={`folder-list__item ${selectedFolder === 'all' && !searchQuery ? 'folder-list__item--active' : ''}`}
-              onClick={() => {
-                setSearchQuery(''); // Clear search when a folder is clicked
-                setSelectedFolder('all');
-              }}
-              style={{ cursor: searchQuery ? 'not-allowed' : 'pointer' }}
-            >
+            <motion.li layout className={`folder-list__item ${selectedFolder === 'all' && !searchQuery ? 'folder-list__item--active' : ''}`} onClick={() => {
+              setSearchQuery('');
+              setSelectedFolder('all');
+              setIsSidebarOpen(false); // Close sidebar on selection
+            }} style={{ cursor: searchQuery ? 'not-allowed' : 'pointer' }}>
               <i className="fas fa-globe-americas fa-fw"></i>All Bookmarks
             </motion.li>
 
-            {/* Render the filtered folders */}
             {filteredData.visibleFolders.map(folder => (
-              <motion.li
-                layout
-                key={folder.id}
-                className={`folder-list__item ${selectedFolder === folder.id && !searchQuery ? 'folder-list__item--active' : ''}`}
-                onClick={() => {
-                  setSearchQuery(''); // Clear search when a folder is clicked
-                  setSelectedFolder(folder.id);
-                }}
-                style={{ cursor: searchQuery ? 'not-allowed' : 'pointer' }}
-              >
-                <i className="fas fa-folder fa-fw"></i>{folder.name}
+              <motion.li layout key={folder.id} className={`folder-list__item ${selectedFolder === folder.id && !searchQuery ? 'folder-list__item--active' : ''}`} onClick={() => {
+                setSearchQuery('');
+                setSelectedFolder(folder.id);
+                setIsSidebarOpen(false); // This is where the error was
+              }} style={{ cursor: searchQuery ? 'not-allowed' : 'pointer' }}>
+                <i className="fas fa-folder fa-fw"></i>
+                <span>{folder.name}</span>
+                <button className="folder-list__delete-btn" title={`Delete "${folder.name}"`} onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteFolder(folder.id, folder.name);
+                }}>
+                  <i className="fas fa-trash-alt fa-sm"></i>
+                </button>
               </motion.li>
             ))}
           </ul>
           <div className="sidebar__footer">
-            {/* <div className="theme-switcher">
-              <button onClick={() => handleThemeChange('light')} className={theme === 'light' ? 'active' : ''} title="Light Theme"><i className="fas fa-sun"></i></button>
-              <button onClick={() => handleThemeChange('dark')} className={theme === 'dark' ? 'active' : ''} title="Dark Theme"><i className="fas fa-moon"></i></button>
-            </div> */}
             <div className="user-info">
               <span title={user.email}>{user.email}</span>
               <button onClick={handleLogout} className="btn" title="Logout"><i className="fas fa-sign-out-alt"></i></button>
@@ -269,32 +234,15 @@ export default function Dashboard({ user, initialBookmarks, initialFolders }) {
 
         <main className="main-content">
           <div className="main-content__header">
-            <h2 className="main-content__title">{selectedFolderName}</h2>
-
-            <div className="d-flex align-items-center gap-4 ">
-              <span
-                className="text-secondary small d-none d-md-block text-center"
-                style={{ marginLeft: '20px' }}
-              >
-                Press <kbd>⌘K</kbd> to add
-              </span>
-
-
-
-              {/* The new single control group */}
+            <div className="d-flex align-items-center gap-3">
+              <h2 className="main-content__title">{selectedFolderName}</h2>
+            </div>
+            <div className="d-flex flex-column align-items-end">
+              <span className="text-secondary small d-none d-md-block mb-2">Press <kbd>⌘K</kbd> to add</span>
               <div className="control-group">
-                {/* Sort Buttons */}
-                <button onClick={() => setSortOrder('newest')} className={sortOrder === 'newest' ? 'active' : ''} title="Sort by Most Recent">
-                  <i className="fas fa-arrow-down"></i>
-                </button>
-                <button onClick={() => setSortOrder('oldest')} className={sortOrder === 'oldest' ? 'active' : ''} title="Sort by Oldest First">
-                  <i className="fas fa-arrow-up"></i>
-                </button>
-
-                {/* Separator */}
+                <button onClick={() => setSortOrder('newest')} className={sortOrder === 'newest' ? 'active' : ''} title="Sort by Most Recent"><i className="fas fa-arrow-down"></i></button>
+                <button onClick={() => setSortOrder('oldest')} className={sortOrder === 'oldest' ? 'active' : ''} title="Sort by Oldest First"><i className="fas fa-arrow-up"></i></button>
                 <div className="control-group__separator"></div>
-
-                {/* View Buttons */}
                 <button onClick={() => setViewMode('grid')} className={viewMode === 'grid' ? 'active' : ''} title="Grid View"><i className="fas fa-th-large"></i></button>
                 <button onClick={() => setViewMode('list')} className={viewMode === 'list' ? 'active' : ''} title="List View"><i className="fas fa-list"></i></button>
               </div>
@@ -302,14 +250,7 @@ export default function Dashboard({ user, initialBookmarks, initialFolders }) {
           </div>
 
           <AnimatePresence>
-            <motion.div
-              key={selectedFolder + viewMode + searchQuery} // Re-animate on search
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-              className={viewMode === 'grid' ? 'grid-container' : 'list-container'}
-            >
-              {/* Render the filtered bookmarks */}
+            <motion.div key={selectedFolder + viewMode + searchQuery + sortOrder} variants={containerVariants} initial="hidden" animate="visible" className={viewMode === 'grid' ? 'grid-container' : 'list-container'}>
               {filteredData.visibleBookmarks.map(bookmark => (
                 <motion.div layout key={bookmark.id} variants={itemVariants}>
                   {viewMode === 'grid' ? (
