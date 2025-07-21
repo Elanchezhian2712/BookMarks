@@ -1,42 +1,628 @@
+/* === "AURORA" BLACK & RED THEME - GLASSMORPHISM FINAL === */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Base Colors: Deeper blacks */
+  --aurora-bg: #000000;
+  --aurora-surface: #121212;
+  --aurora-surface-hover: #1f1f1f;
+  
+  /* Text Colors: Standard high-contrast whites */
+  --aurora-text-primary: #f0f0f5;
+  --aurora-text-secondary: #a0a0a0;
+
+  /* Border Colors: Subtle gray borders */
+  --aurora-border: rgba(255, 255, 255, 0.1);
+  --aurora-border-hover: rgba(255, 255, 255, 0.2);
+
+  /* ACCENT COLORS: Red Gradient */
+  --aurora-glow-start: #e52d27; /* Bright Red */
+  --aurora-glow-end: #b31217;   /* Deep Red */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Light theme (optional) */
+html[data-theme='light'] {
+  --aurora-bg: #f5f5f5;
+  --aurora-surface: #ffffff;
+  --aurora-surface-hover: #f0f0f0;
+  --aurora-text-primary: #111014;
+  --aurora-text-secondary: #6b6b70;
+  --aurora-border: rgba(0, 0, 0, 0.1);
+  --aurora-border-hover: rgba(0, 0, 0, 0.2);
+  
+  /* Keep the red accents for the light theme */
+  --aurora-glow-start: #e52d27;
+  --aurora-glow-end: #b31217;
 }
 
-html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
+  color: var(--aurora-text-primary);
+  font-family: 'Sora', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  /* Set the background for the entire app */
+  background-color: var(--aurora-bg);
+  /* background-image: url('/spiderman-bg.jpg'); */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Prevents the background from scrolling */
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* --- Main Layout --- */
+.aurora-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
 }
 
-* {
-  box-sizing: border-box;
+/* --- Sidebar with Glass Effect --- */
+/* --- Replace with this updated block --- */
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  
+  /* GLASS EFFECT */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  
+  /* We use a full border now instead of just border-right */
+  border: 1px solid var(--aurora-border); 
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+
+  /* === NEWLY ADDED PROPERTIES === */
+  border-radius: 30px; /* This rounds the corners */
+  margin: 1rem; /* This adds space around the sidebar */
+  height: calc(100vh - 5rem); /* Adjust height to account for the margin */
+}
+.sidebar__header {
+  font-size: 1.25rem;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.sidebar__section {
+  padding: 0 0.75rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--aurora-text-secondary);
+}
+
+.folder-list {
+  list-style: none;
   padding: 0;
   margin: 0;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.folder-list__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+.folder-list__item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.folder-list__item--active {
+  background: linear-gradient(90deg, var(--aurora-glow-start), var(--aurora-glow-end));
+  color: white !important;
+  font-weight: 600;
+}
+
+.sidebar__footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--aurora-border);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+
+/* === Search Bar Style === */
+.sidebar__search-input {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  border: 1px solid var(--aurora-border);
+  color: var(--aurora-text-primary);
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+.sidebar__search-input:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: var(--aurora-glow-end);
+  box-shadow: 0 0 0 3px rgba(229, 45, 39, 0.2);
+}
+
+
+/* --- Main Content Area --- */
+.main-content {
+  flex-grow: 1;
+  padding: 1.5rem 2.5rem;
+  overflow-y: auto;
+}
+
+.main-content__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.main-content__title {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* --- Find and replace this entire block in globals.css --- */
+
+.view-switcher {
+  display: flex;
+  align-items: center; /* Vertically align items */
+  gap: 4px; /* This adds a precise 4px space BETWEEN the buttons */
+  
+  /* Glass effect styles (unchanged) */
+  background-color: rgba(255, 255, 255, 0.267);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--aurora-border);
+}
+
+.view-switcher button {
+  background: transparent;
+  border: none;
+  color: var(--aurora-text-secondary);
+  
+  /* We use equal padding on all sides for a square look */
+  padding: 0.6rem; 
+  
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  /* Ensure icons are centered perfectly */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1; /* Helps with vertical alignment of icons */
+}
+
+.view-switcher button.active {
+  background-color: var(--aurora-surface-hover);
+  color: var(--aurora-text-primary);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+
+/* --- Find and DELETE the .view-switcher and .sort-switcher blocks --- */
+/* --- And REPLACE them with this single block --- */
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 4px; /* Space between individual buttons */
+  
+  /* Glass effect styles */
+  background-color: rgba(24, 22, 28, 0.7);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--aurora-border);
+  margin-top: 16px;
+  
+}
+
+.control-group button {
+  background: transparent;
+  border: none;
+  color: var(--aurora-text-secondary);
+  padding: 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.control-group button.active {
+  background-color: var(--aurora-surface-hover);
+  color: var(--aurora-text-primary);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* New style for the separator line */
+.control-group__separator {
+  width: 1px;
+  height: 16px; /* Adjust height as needed */
+  background-color: var(--aurora-border);
+  margin: 0 4px; /* Add some space around the line */
+}
+
+
+/* === ADD THIS to globals.css === */
+
+.sort-switcher {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  
+  background-color: rgba(24, 22, 28, 0.7);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--aurora-border);
+}
+
+.sort-switcher button {
+  background: transparent;
+  border: none;
+  color: var(--aurora-text-secondary);
+  padding: 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.sort-switcher button.active {
+  background-color: var(--aurora-surface-hover);
+  color: var(--aurora-text-primary);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+
+/* --- Command Bar (Cmd+K) --- */
+.command-bar-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 15vh;
+  z-index: 1000;
+}
+.command-bar {
+  width: 640px;
+  background-color: var(--aurora-surface);
+  border-radius: 12px;
+  border: 1px solid var(--aurora-border);
+  box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+  overflow: hidden;
+}
+.command-bar__form { padding: 1rem; }
+.command-bar__footer {
+  padding: 0.75rem 1rem;
+  background-color: var(--aurora-bg);
+  border-top: 1px solid var(--aurora-border);
+  text-align: right;
+}
+
+/* --- Grid View Card with Glass Effect --- */
+.grid-container {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+.aurora-card {
+  /* GLASS EFFECT */
+  background-color: rgba(18, 18, 18, 0.6); /* Slightly different transparency */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  border: 1px solid var(--aurora-border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.aurora-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--aurora-border-hover);
+  background-color: rgba(31, 31, 31, 0.7);
+}
+
+/* --- List View Item with Glass Effect on Hover --- */
+.list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.aurora-list-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+.aurora-list-item:hover {
+  /* Apply glass effect on hover */
+  background-color: rgba(24, 22, 28, 0.7);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-color: var(--aurora-border);
+}
+
+.aurora-card__description, .aurora-list-item__description {
+  font-size: 0.9rem;
+  color: var(--aurora-text-secondary);
+  margin-top: 0.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+.aurora-card__footer {
+  margin-top: 1.25rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--aurora-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.aurora-card__link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--aurora-text-secondary);
+  text-decoration: none;
+  overflow: hidden;
+}
+.aurora-card__link span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.aurora-card__link:hover {
+  color: var(--aurora-text-primary);
+}
+
+.aurora-actions {
+  display: flex;
+  gap: 0.25rem;
+}
+.aurora-actions button {
+  background: none;
+  border: none;
+  color: var(--aurora-text-secondary);
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.aurora-actions button:hover {
+  background-color: var(--aurora-surface-hover);
+  color: var(--aurora-text-primary);
+}
+
+.aurora-list-item__icon {
+  color: var(--aurora-text-secondary);
+  margin-right: 1.25rem;
+}
+.aurora-list-item__content {
+  flex-grow: 1;
+  overflow: hidden;
+}
+.aurora-list-item__title {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.aurora-list-item__link {
+  font-size: 0.85rem;
+  color: var(--aurora-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.aurora-list-item .aurora-actions {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.aurora-list-item:hover .aurora-actions {
+  opacity: 1;
+}
+
+/* --- Theme Switcher --- */
+.theme-switcher {
+  display: flex;
+  width: 100%;
+  background-color: var(--aurora-surface);
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--aurora-border);
+}
+
+.theme-switcher button {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--aurora-text-secondary);
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-switcher button.active {
+  background-color: var(--aurora-bg);
+  color: var(--aurora-text-primary);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.user-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.user-info span {
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--aurora-text-secondary);
+}
+
+/* --- Shared Components --- */
+.btn { border: none; cursor: pointer; border-radius: 6px; }
+
+.btn-primary {
+  background: linear-gradient(90deg, var(--aurora-glow-start), var(--aurora-glow-end));
+  color: white;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-primary:hover {
+  transform: scale(1.03);
+  box-shadow: 0 5px 20px rgba(229, 45, 39, 0.3); /* Red glow for hover */
+}
+
+.form-control {
+  background: var(--aurora-surface);
+  border: 1px solid var(--aurora-border);
+  border-radius: 6px;
+  color: var(--aurora-text-primary);
+  padding: 0.75rem 1rem;
+  width: 100%;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--aurora-glow-end);
+  box-shadow: 0 0 0 3px rgba(229, 45, 39, 0.3); /* Red focus ring */
+}
+
+/* === NEW "GLASSMORPHISM" LOGIN PAGE STYLES === */
+/* === REFINED "GLASSMORPHISM" LOGIN PAGE STYLES === */
+
+.glass-login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+  /* The new Spider-Man background */
+  background-image: url('/spiderman-bg.jpg'); 
+  background-size: cover;
+  background-position: center;
+}
+
+.glass-login-card {
+  width: 100%;
+  max-width: 420px; /* Slightly wider for better proportions */
+  text-align: center;
+  
+  /* Enhanced Glassmorphism Effect */
+  background: rgba(10, 10, 12, 0.65); /* Darker, more transparent base */
+  backdrop-filter: blur(20px); /* Increased blur for a frostier look */
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Very subtle border */
+  border-radius: 20px; /* More pronounced rounding */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+
+  padding: 3rem;
+}
+
+.glass-logo {
+  color: #fff;
+  margin-bottom: 2rem;
+}
+
+.glass-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #f5f5f5;
+  margin-bottom: 2.5rem; /* More space below title */
+}
+
+.glass-input-group {
+  margin-bottom: 1.5rem; /* Increased spacing between inputs */
+}
+
+.glass-input {
+  width: 90%;
+  padding: 1rem;
+  font-size: 1rem;
+  border-radius: 12px;
+  border: none;
+  background-color: #e8e8f0;
+  color: #111;
+  text-align: left;
+}
+
+/* Corrected placeholder styles */
+.glass-input::placeholder {
+  color: #999; /* Lighter gray for better visibility */
+  opacity: 1;
+}
+
+.glass-input:focus {
+  outline: none;
+  /* Use the button color for focus ring */
+  box-shadow: 0 0 0 3px rgba(13, 76, 76, 0.5); 
+}
+
+.glass-button {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  /* Color-matched to the image's teal */
+  background-color: #ff0000; 
+  border: 1px solid rgb(255, 255, 255); /* Subtle border for depth */
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  transition: all 0.2s ease;
+}
+
+.glass-button:hover {
+  background-color: #000000; /* A slightly lighter teal on hover */
+  box-shadow: 0 4px 20px rgb(0, 0, 0);
+   color: #ffffff;
+}
+
+.glass-button:active {
+  transform: scale(0.98);
+}
+
+.glass-button:disabled {
+  background-color: #333;
+  color: #666;
+  cursor: not-allowed;
 }
