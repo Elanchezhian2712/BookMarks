@@ -49,32 +49,39 @@ body {
 /* --- Main Layout --- */
 .aurora-layout {
   display: flex;
-  height: 100vh;
-  overflow: hidden;
+  /* We want the layout to be at least the screen height, but can grow taller */
+  min-height: 100vh; 
+  padding: 1rem;
+  gap: 1rem;
+  align-items: flex-start; /* Align items to the top */
 }
-
 /* --- Sidebar with Glass Effect --- */
 /* --- Replace with this updated block --- */
 .sidebar {
   width: 260px;
   flex-shrink: 0;
   
+  /* Make the sidebar sticky so it stays in place while you scroll the page */
+  position: sticky;
+  top: 1rem; 
+  
   /* GLASS EFFECT */
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   
-  /* We use a full border now instead of just border-right */
   border: 1px solid var(--aurora-border); 
+  border-radius: 16px; 
+  
   display: flex;
   flex-direction: column;
   padding: 1rem;
-
-  /* === NEWLY ADDED PROPERTIES === */
-  border-radius: 30px; /* This rounds the corners */
-  margin: 1rem; /* This adds space around the sidebar */
-  height: calc(100vh - 5rem); /* Adjust height to account for the margin */
+  
+  /* We need to set a height for the sticky position to work correctly */
+  height: calc(100vh - 5rem);
 }
+
+
 .sidebar__header {
   font-size: 1.25rem;
   padding: 0.75rem;
@@ -152,8 +159,19 @@ body {
 /* --- Main Content Area --- */
 .main-content {
   flex-grow: 1;
+  /* REMOVE the overflow property to allow content to expand */
+  
+  /* Make it a matching glass panel */
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid var(--aurora-border);
+  border-radius: 16px;
+  
   padding: 1.5rem 2.5rem;
-  overflow-y: auto;
+  
+  /* Allow this panel to grow with its content */
+  min-height: calc(100vh - 2rem);
 }
 
 .main-content__header {
