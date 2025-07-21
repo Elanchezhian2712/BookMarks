@@ -571,6 +571,42 @@ body {
   opacity: 1;
 }
 
+
+/* === ADD THIS to app/globals.css === */
+
+.aurora-card__description-wrapper {
+  display: flex;
+  align-items: flex-start; /* Align items to the top */
+  gap: 0.5rem; /* Space between text and button */
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem; /* Add some space below */
+}
+
+.aurora-card__description {
+  /* Remove margin-top from the p tag itself */
+  margin-top: 0;
+}
+
+.aurora-card__copy-btn {
+  background: none;
+  border: none;
+  color: var(--aurora-text-secondary);
+  padding: 0.25rem;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: all 0.2s ease;
+}
+
+.aurora-card:hover .aurora-card__copy-btn {
+  opacity: 1; /* Make button fully visible when hovering the card */
+}
+
+.aurora-card__copy-btn:hover {
+  background-color: var(--aurora-surface-hover);
+  color: var(--aurora-text-primary);
+}
+
 /* --- Theme Switcher --- */
 .theme-switcher {
   display: flex;

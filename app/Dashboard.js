@@ -38,7 +38,7 @@ function CommandBar({ isOpen, onClose, onFormSubmit, editingBookmark }) {
     if (!isOpen) return null;
 
     return (
-        <AnimatePresence>
+      <AnimatePresence>
             <motion.div className="command-bar-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
                 <motion.div className="command-bar" initial={{ y: -20, opacity: 0, scale: 0.95 }} animate={{ y: 0, opacity: 1, scale: 1 }} exit={{ y: -20, opacity: 0, scale: 0.95 }} transition={{ type: 'spring', stiffness: 400, damping: 30 }} onClick={(e) => e.stopPropagation()}>
                     <form id="bookmark-form" onSubmit={handleSubmit}>
@@ -151,6 +151,36 @@ export default function Dashboard({ user, initialBookmarks, initialFolders }) {
     await refreshData();
   };
 
+
+// --- The new, robust function ---
+const handleCopy = (textToCopy, event) => {
+    // Check if the Clipboard API is available
+    if (!navigator.clipboard) {
+        // You could show an alert or a more sophisticated notification
+        console.error("Clipboard API not available in this context.");
+        alert("Copying to clipboard is not supported in this browser or context (e.g., non-HTTPS).");
+        return; // Exit the function
+    }
+
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        // Success: The text was copied. Now show the visual feedback.
+        const button = event.currentTarget;
+        const originalIcon = button.innerHTML;
+        button.innerHTML = `<i class="fas fa-check"></i>`; // Show checkmark
+        
+        setTimeout(() => {
+            // Revert to original icon only after a successful copy
+            button.innerHTML = originalIcon;
+        }, 1500);
+
+    }).catch(err => {
+        // Error: The user might have denied clipboard access, or another error occurred.
+        console.error('Failed to copy text: ', err);
+        alert('Could not copy text to clipboard.');
+    });
+};
+
+
   // Main Filtering and Sorting Logic
   const filteredData = useMemo(() => {
     const query = searchQuery.toLowerCase().trim();
@@ -224,6 +254,7 @@ export default function Dashboard({ user, initialBookmarks, initialFolders }) {
               </motion.li>
             ))}
           </ul>
+
           <div className="sidebar__footer">
             <div className="user-info">
               <span title={user.email}>{user.email}</span>
@@ -260,7 +291,18 @@ export default function Dashboard({ user, initialBookmarks, initialFolders }) {
                   {viewMode === 'grid' ? (
                     <div className="aurora-card">
                       <h5 className="fw-bold text-truncate">{bookmark.title}</h5>
-                      <p className="aurora-card__description">{bookmark.description || 'No description'}</p>
+                      {bookmark.description && (
+                        <div className="aurora-card__description-wrapper">
+                          <p className="aurora-card__description">{bookmark.description}</p>
+                          <button 
+                            className="aurora-card__copy-btn" 
+                            title="Copy description"
+                            onClick={(e) => handleCopy(bookmark.description, e)}
+                          >
+                            <i className="far fa-copy"></i>
+                          </button>
+                        </div>
+                      )}
                       <div className="aurora-card__footer">
                         {bookmark.link ? (
                           <a href={bookmark.link} target="_blank" rel="noopener noreferrer" className="aurora-card__link">
