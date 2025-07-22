@@ -45,7 +45,6 @@ export default function LoginPage() {
 
   return (
     <div className="glass-login-page">
-      {/* ... your existing JSX ... */}
       <motion.div 
         className="glass-login-card"
         initial={{ opacity: 0, scale: 0.9 }}

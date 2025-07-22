@@ -40,7 +40,6 @@ html, body {
 /* --- MODIFIED Global Body Style (for all pages EXCEPT login) --- */
 body {
   color: var(--aurora-text-primary);
-  font-family: 'Sora', sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
   background-image: url('/spiderman-bg.png');
   background-size: cover;
@@ -70,7 +69,7 @@ body.no-scroll {
   flex-shrink: 0;
   position: sticky;
   top: 1rem; 
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(10, 10, 12, 0.425);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border: 1px solid var(--aurora-border); 
@@ -159,7 +158,7 @@ body.no-scroll {
 /* --- Main Content Area --- */
 .main-content {
   flex-grow: 1;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(10, 10, 12, 0.425);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border: 1px solid var(--aurora-border);
@@ -664,10 +663,10 @@ body.no-scroll {
   width: 100%;
   max-width: 420px; 
   text-align: center;
-  background: rgba(10, 10, 12, 0.65); 
+  background: rgba(10, 10, 12, 0.425); 
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1); 
+  border: 1px solid rgba(252, 2, 2, 0.1); 
   border-radius: 20px; 
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   padding: 3rem;
