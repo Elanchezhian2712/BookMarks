@@ -152,32 +152,53 @@ export default function Dashboard({ user, initialBookmarks, initialFolders }) {
   };
 
 
-// --- The new, robust function ---
 const handleCopy = (textToCopy, event) => {
-    // Check if the Clipboard API is available
-    if (!navigator.clipboard) {
-        // You could show an alert or a more sophisticated notification
-        console.error("Clipboard API not available in this context.");
-        alert("Copying to clipboard is not supported in this browser or context (e.g., non-HTTPS).");
-        return; // Exit the function
-    }
+  const button = event.currentTarget;
+  const originalIcon = button.innerHTML;
 
+  // Try Clipboard API
+  if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(textToCopy).then(() => {
-        // Success: The text was copied. Now show the visual feedback.
-        const button = event.currentTarget;
-        const originalIcon = button.innerHTML;
-        button.innerHTML = `<i class="fas fa-check"></i>`; // Show checkmark
-        
-        setTimeout(() => {
-            // Revert to original icon only after a successful copy
-            button.innerHTML = originalIcon;
-        }, 1500);
-
+      button.innerHTML = `<i class="fas fa-check"></i>`;
+      setTimeout(() => {
+        button.innerHTML = originalIcon;
+      }, 1500);
     }).catch(err => {
-        // Error: The user might have denied clipboard access, or another error occurred.
-        console.error('Failed to copy text: ', err);
-        alert('Could not copy text to clipboard.');
+      console.error("Clipboard API failed:", err);
+      fallbackCopy(textToCopy, button, originalIcon);
     });
+  } else {
+    // Fallback if Clipboard API is not supported
+    fallbackCopy(textToCopy, button, originalIcon);
+  }
+};
+
+// Fallback for non-HTTPS or unsupported browsers
+const fallbackCopy = (text, button, originalIcon) => {
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "fixed"; // avoid scroll jump
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+
+  try {
+    const success = document.execCommand("copy");
+    if (success) {
+      button.innerHTML = `<i class="fas fa-check"></i>`;
+      setTimeout(() => {
+        button.innerHTML = originalIcon;
+      }, 1500);
+    } else {
+      alert("Copy command failed");
+    }
+  } catch (err) {
+    console.error("Fallback copy failed:", err);
+    alert("Could not copy text to clipboard.");
+  }
+
+  document.body.removeChild(textarea);
 };
 
 

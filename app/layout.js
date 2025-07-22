@@ -1,14 +1,17 @@
-import { Sora } from "next/font/google";
+
 import "./globals.css";
 
-const sora = Sora({ 
+import { Rajdhani } from "next/font/google";
+
+const rajdhani = Rajdhani({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: '--font-sora'
+  weight: ["500", "600", "700"],
+  variable: "--font-rajdhani",
 });
 
+
 export const metadata = {
-  title: "Elan Book Mark",
+  title: "My Book Mark",
   description: "Your personal bookmark manager",
 };
 
@@ -16,10 +19,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="dark">
       <head>
-        {/* We use Font Awesome for icons */}
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+        {/* Font Awesome for icons */}
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        />
       </head>
-      <body className={sora.className}>{children}</body>
+      <body className={rajdhani.className}>{children}</body>
     </html>
   );
 }
