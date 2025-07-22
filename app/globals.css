@@ -1,21 +1,14 @@
 /* === "AURORA" BLACK & RED THEME - GLASSMORPHISM FINAL === */
 :root {
-  /* Base Colors: Deeper blacks */
   --aurora-bg: #000000;
   --aurora-surface: #121212;
   --aurora-surface-hover: #1f1f1f;
-  
-  /* Text Colors: Standard high-contrast whites */
   --aurora-text-primary: #f0f0f5;
   --aurora-text-secondary: #a0a0a0;
-
-  /* Border Colors: Subtle gray borders */
   --aurora-border: rgba(255, 255, 255, 0.1);
   --aurora-border-hover: rgba(255, 255, 255, 0.2);
-
-  /* ACCENT COLORS: Red Gradient */
-  --aurora-glow-start: #e52d27; /* Bright Red */
-  --aurora-glow-end: #b31217;   /* Deep Red */
+  --aurora-glow-start: #e52d27; 
+  --aurora-glow-end: #b31217;  
 }
 
 /* Light theme (optional) */
@@ -27,58 +20,65 @@ html[data-theme='light'] {
   --aurora-text-secondary: #6b6b70;
   --aurora-border: rgba(0, 0, 0, 0.1);
   --aurora-border-hover: rgba(0, 0, 0, 0.2);
-  
-  /* Keep the red accents for the light theme */
   --aurora-glow-start: #e52d27;
   --aurora-glow-end: #b31217;
 }
 
+
+/* In globals.css */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* For better layout calculations */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* --- MODIFIED Global Body Style (for all pages EXCEPT login) --- */
 body {
   color: var(--aurora-text-primary);
   font-family: 'Sora', sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
-
-  /* Set the background for the entire app */
-  background-color: var(--aurora-bg);
-  background-image: url('/spiderman-bg.jpg');
+  background-image: url('/spiderman-bg.png');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed; /* Prevents the background from scrolling */
+  background-attachment: fixed;
 }
+
+/* This class ONLY applies when LoginPage is mounted to prevent scrolling */
+body.no-scroll {
+  overflow: hidden;
+}
+
 
 /* --- Main Layout --- */
 .aurora-layout {
   display: flex;
-  /* We want the layout to be at least the screen height, but can grow taller */
-  min-height: 100vh; 
+  min-height: 100vh;
   padding: 1rem;
   gap: 1rem;
-  align-items: flex-start; /* Align items to the top */
+  align-items: flex-start;
 }
+
+
 /* --- Sidebar with Glass Effect --- */
-/* --- Replace with this updated block --- */
 .sidebar {
   width: 260px;
   flex-shrink: 0;
-  
-  /* Make the sidebar sticky so it stays in place while you scroll the page */
   position: sticky;
   top: 1rem; 
-  
-  /* GLASS EFFECT */
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  
   border: 1px solid var(--aurora-border); 
   border-radius: 16px; 
-  
   display: flex;
   flex-direction: column;
   padding: 1rem;
-  
-  /* We need to set a height for the sticky position to work correctly */
-  height: calc(100vh - 5rem);
+  height: calc(100vh - 2rem);
 }
 
 
@@ -159,18 +159,12 @@ body {
 /* --- Main Content Area --- */
 .main-content {
   flex-grow: 1;
-  /* REMOVE the overflow property to allow content to expand */
-  
-  /* Make it a matching glass panel */
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border: 1px solid var(--aurora-border);
   border-radius: 16px;
-  
   padding: 1.5rem 2.5rem;
-  
-  /* Allow this panel to grow with its content */
   min-height: calc(100vh - 2rem);
 }
 
@@ -190,10 +184,8 @@ body {
 
 .view-switcher {
   display: flex;
-  align-items: center; /* Vertically align items */
-  gap: 4px; /* This adds a precise 4px space BETWEEN the buttons */
-  
-  /* Glass effect styles (unchanged) */
+  align-items: center; 
+  gap: 4px; 
   background-color: rgba(255, 255, 255, 0.267);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
@@ -206,19 +198,14 @@ body {
   background: transparent;
   border: none;
   color: var(--aurora-text-secondary);
-  
-  /* We use equal padding on all sides for a square look */
   padding: 0.6rem; 
-  
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
-  
-  /* Ensure icons are centered perfectly */
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1; /* Helps with vertical alignment of icons */
+  line-height: 1; 
 }
 
 .view-switcher button.active {
@@ -229,14 +216,10 @@ body {
 
 
 /* --- Find and DELETE the .view-switcher and .sort-switcher blocks --- */
-/* --- And REPLACE them with this single block --- */
-
 .control-group {
   display: flex;
   align-items: center;
-  gap: 4px; /* Space between individual buttons */
-  
-  /* Glass effect styles */
+  gap: 4px; 
   background-color: rgba(24, 22, 28, 0.7);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
@@ -270,14 +253,13 @@ body {
 /* New style for the separator line */
 .control-group__separator {
   width: 1px;
-  height: 16px; /* Adjust height as needed */
+  height: 16px; 
   background-color: var(--aurora-border);
-  margin: 0 4px; /* Add some space around the line */
+  margin: 0 4px;
 }
 
 
 /* === ADD THIS to globals.css === */
-
 .sort-switcher {
   display: flex;
   align-items: center;
@@ -313,29 +295,26 @@ body {
 
 
 /* --- Command Bar (Cmd+K) --- */
-/* === Find and REPLACE the old .command-bar-* styles with these === */
-
 .command-bar-overlay {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.6); /* Darker overlay */
+  background: rgba(0, 0, 0, 0.6); 
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
-  align-items: center; /* Center the modal vertically */
+  align-items: center; 
   padding: 1rem;
   z-index: 1000;
 }
 
 .command-bar {
   width: 100%;
-  max-width: 550px; /* A good standard width for modals */
+  max-width: 550px; 
   background-color: var(--aurora-surface);
   border-radius: 12px;
   border: 1px solid var(--aurora-border);
   box-shadow: 0 10px 50px rgba(0,0,0,0.5);
   overflow: hidden;
-  /* We will use flexbox to structure the new layout */
   display: flex;
   flex-direction: column;
 }
@@ -353,7 +332,7 @@ body {
   background: transparent;
   border: none;
   border-bottom: 1px solid var(--aurora-border);
-  padding: 1.25rem 1rem; /* Generous padding for a premium feel */
+  padding: 1.25rem 1rem; 
   color: var(--aurora-text-primary);
   font-size: 1rem;
 }
@@ -374,7 +353,6 @@ body {
 .command-bar__actions {
   padding: 1rem 1.5rem;
   text-align: right;
-  /* Add a top border to separate it from the form */
   border-top: 1px solid var(--aurora-border);
 }
 
@@ -383,7 +361,7 @@ body {
   background: var(--aurora-glow-start);
   color: white;
   border: none;
-  border-radius: 999px; /* Pill shape */
+  border-radius: 999px; 
   padding: 0.6rem 1.25rem;
   font-weight: 600;
   cursor: pointer;
@@ -397,15 +375,13 @@ body {
 
 
 /* === ADD THIS to app/globals.css === */
-
 .folder-list__item {
-  /* Add this to enable positioning of the delete button */
   position: relative; 
 }
 
 .folder-list__delete-btn {
-  position: absolute; /* Position it within the folder item */
-  right: 0.75rem; /* Align to the right */
+  position: absolute; 
+  right: 0.75rem; 
   top: 50%;
   transform: translateY(-50%);
 
@@ -415,8 +391,6 @@ body {
   padding: 0.5rem;
   border-radius: 6px;
   cursor: pointer;
-  
-  /* Hide by default */
   opacity: 0;
   transition: all 0.2s ease;
 }
@@ -428,7 +402,7 @@ body {
 
 .folder-list__item .folder-list__delete-btn:hover {
   opacity: 1;
-  color: #ffffff; /* A standard danger red */
+  color: #ffffff; 
   background-color: rgba(239, 68, 68, 0.1);
 }
 
@@ -445,13 +419,11 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 .aurora-card {
-  /* GLASS EFFECT */
   background-color: rgba(18, 18, 18, 0.6); /* Slightly different transparency */
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-
   border: 1px solid var(--aurora-border);
-  border-radius: 12px;
+  border-radius: 15px;
   padding: 1.25rem;
   transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
   position: relative;
@@ -461,7 +433,7 @@ body {
 .aurora-card:hover {
   transform: translateY(-4px);
   border-color: var(--aurora-border-hover);
-  background-color: rgba(31, 31, 31, 0.7);
+  background-color: rgba(136, 23, 23, 0.514);
 }
 
 /* --- List View Item with Glass Effect on Hover --- */
@@ -479,8 +451,7 @@ body {
   transition: all 0.2s ease;
 }
 .aurora-list-item:hover {
-  /* Apply glass effect on hover */
-  background-color: rgba(24, 22, 28, 0.7);
+  background-color: rgba(136, 23, 23, 0.514);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   border-color: var(--aurora-border);
@@ -576,14 +547,13 @@ body {
 
 .aurora-card__description-wrapper {
   display: flex;
-  align-items: flex-start; /* Align items to the top */
-  gap: 0.5rem; /* Space between text and button */
+  align-items: flex-start;
+  gap: 0.5rem; 
   margin-top: 0.5rem;
-  margin-bottom: 0.5rem; /* Add some space below */
+  margin-bottom: 0.5rem; 
 }
 
 .aurora-card__description {
-  /* Remove margin-top from the p tag itself */
   margin-top: 0;
 }
 
@@ -599,7 +569,7 @@ body {
 }
 
 .aurora-card:hover .aurora-card__copy-btn {
-  opacity: 1; /* Make button fully visible when hovering the card */
+  opacity: 1; 
 }
 
 .aurora-card__copy-btn:hover {
@@ -660,7 +630,7 @@ body {
 }
 .btn-primary:hover {
   transform: scale(1.03);
-  box-shadow: 0 5px 20px rgba(229, 45, 39, 0.3); /* Red glow for hover */
+  box-shadow: 0 5px 20px rgba(229, 45, 39, 0.3); 
 }
 
 .form-control {
@@ -676,37 +646,30 @@ body {
 .form-control:focus {
   outline: none;
   border-color: var(--aurora-glow-end);
-  box-shadow: 0 0 0 3px rgba(230, 11, 3, 0.3); /* Red focus ring */
+  box-shadow: 0 0 0 3px rgba(230, 11, 3, 0.3); 
 }
 
 /* === NEW "GLASSMORPHISM" LOGIN PAGE STYLES === */
-/* === REFINED "GLASSMORPHISM" LOGIN PAGE STYLES === */
-
 .glass-login-page {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
   padding: 1rem;
-  /* The new Spider-Man background */
-  /* background-image: url('/spiderman-bg.jpg');  */
   background-size: cover;
   background-position: center;
 }
 
 .glass-login-card {
   width: 100%;
-  max-width: 420px; /* Slightly wider for better proportions */
+  max-width: 420px; 
   text-align: center;
-  
-  /* Enhanced Glassmorphism Effect */
-  background: rgba(10, 10, 12, 0.65); /* Darker, more transparent base */
-  backdrop-filter: blur(20px); /* Increased blur for a frostier look */
+  background: rgba(10, 10, 12, 0.65); 
+  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1); /* Very subtle border */
-  border-radius: 20px; /* More pronounced rounding */
+  border: 1px solid rgba(255, 255, 255, 0.1); 
+  border-radius: 20px; 
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-
   padding: 3rem;
 }
 
@@ -719,11 +682,11 @@ body {
   font-size: 1.75rem;
   font-weight: 600;
   color: #f5f5f5;
-  margin-bottom: 2.5rem; /* More space below title */
+  margin-bottom: 2.5rem; 
 }
 
 .glass-input-group {
-  margin-bottom: 1.5rem; /* Increased spacing between inputs */
+  margin-bottom: 1.5rem; 
 }
 
 .glass-input {
@@ -739,13 +702,12 @@ body {
 
 /* Corrected placeholder styles */
 .glass-input::placeholder {
-  color: #999; /* Lighter gray for better visibility */
+  color: #999; 
   opacity: 1;
 }
 
 .glass-input:focus {
   outline: none;
-  /* Use the button color for focus ring */
   box-shadow: 0 0 0 3px rgba(13, 76, 76, 0.5); 
 }
 
@@ -755,9 +717,8 @@ body {
   font-size: 1rem;
   font-weight: 600;
   color: #ffffff;
-  /* Color-matched to the image's teal */
   background-color: #ff0000; 
-  border: 1px solid rgb(255, 255, 255); /* Subtle border for depth */
+  border: 1px solid rgb(255, 255, 255); 
   border-radius: 12px;
   cursor: pointer;
   margin-top: 1.5rem;
@@ -765,7 +726,7 @@ body {
 }
 
 .glass-button:hover {
-  background-color: #000000; /* A slightly lighter teal on hover */
+  background-color: #000000; 
   box-shadow: 0 4px 20px rgb(0, 0, 0);
    color: #ffffff;
 }

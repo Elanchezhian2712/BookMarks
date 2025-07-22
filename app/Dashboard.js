@@ -225,7 +225,7 @@ const handleCopy = (textToCopy, event) => {
           }} />
 
           <div className="sidebar__section">
-            <span>Folders</span>
+            <span>New Folders</span>
             <button onClick={handleAddFolder} className="btn" title="Add Folder"><i className="fas fa-plus"></i></button>
           </div>
           <ul className="folder-list">
