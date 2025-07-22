@@ -1,43 +1,25 @@
-import { createServerClient } from '@supabase/ssr'
+// middleware.ts
 import { NextResponse } from 'next/server'
 
+const rateLimitMap = new Map()
+
 export async function middleware(req) {
-  const res = NextResponse.next()
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    {
-      cookies: {
-        get(name) {
-          return req.cookies.get(name)?.value
-        },
-        set(name, value, options) {
-          req.cookies.set({ name, value, ...options })
-          res.cookies.set({ name, value, ...options })
-        },
-        remove(name, options) {
-          req.cookies.set({ name, value: '', ...options })
-          res.cookies.set({ name, value: '', ...options })
-        },
-      },
-    }
-  )
+  const ip = req.ip ?? req.headers.get("x-forwarded-for") ?? "unknown"
+  const now = Date.now()
 
-  const { data: { session } } = await supabase.auth.getSession();
+  const prev = rateLimitMap.get(ip) || []
+  const recent = prev.filter(timestamp => now - timestamp < 60_000) // 1 minute
 
-  // If user is not signed in and tries to access the main page, redirect to login
-  if (!session && req.nextUrl.pathname === '/') {
-    return NextResponse.redirect(new URL('/login', req.url));
+  if (recent.length > 10) {
+    return new NextResponse("Too many requests", { status: 429 })
   }
 
-  // If user is signed in and tries to access the login page, redirect to main page
-  if (session && req.nextUrl.pathname === '/login') {
-    return NextResponse.redirect(new URL('/', req.url));
-  }
-  
-  return res
+  recent.push(now)
+  rateLimitMap.set(ip, recent)
+
+  return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/', '/login'],
+  matcher: ['/api/login'], // apply to login route
 }

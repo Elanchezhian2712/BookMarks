@@ -42,7 +42,7 @@ body {
   color: var(--aurora-text-primary);
   font-family: 'Sora', sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
-  background-image: url('/spiderman-bg.png');
+  /* background-image: url('/spiderman-bg.png'); */
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
