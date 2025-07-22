@@ -38,13 +38,64 @@ html, body {
 }
 
 /* --- MODIFIED Global Body Style (for all pages EXCEPT login) --- */
+/* --- And REPLACE it with this --- */
+
 body {
   color: var(--aurora-text-primary);
-  transition: background-color 0.3s ease, color 0.3s ease;
-  background-image: url('/spiderman-bg.png');
+  font-family: 'Sora', sans-serif;
+  
+  /* --- Base styles for the main background (Image 1) --- */
+  background-image: url('/spiderman-bg.png'); /* The first image */
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
+  
+  /* We need a position context for the pseudo-element */
+  position: relative; 
+  z-index: 1;
+}
+
+/* --- This pseudo-element holds the second image and fades in/out --- */
+body::before {
+  content: '';
+  position: fixed; /* Fixed position to cover the whole screen */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  
+  /* The second image */
+  background-image: url('/deadpool.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  
+  /* The key is animating the opacity */
+  opacity: 0; /* Starts transparent */
+  z-index: -1; /* Place it behind the body's content */
+  
+  /* Apply the animation */
+  animation: backgroundFade 10s infinite;
+}
+
+
+/* --- The Keyframes Animation Definition --- */
+@keyframes backgroundFade {
+  0% {
+    opacity: 0; /* Start with image 2 transparent */
+  }
+  25% {
+    opacity: 1; /* Fade in image 2 over 2.5 seconds */
+  }
+  50% {
+    opacity: 1; /* Hold image 2 for 2.5 seconds */
+  }
+  75% {
+    opacity: 0; /* Fade out image 2 over 2.5 seconds */
+  }
+  100% {
+    opacity: 0; /* Hold image 1 (by keeping image 2 transparent) */
+  }
 }
 
 /* This class ONLY applies when LoginPage is mounted to prevent scrolling */
