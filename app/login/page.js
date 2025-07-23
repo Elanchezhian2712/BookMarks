@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react'; // 1. Import useEffect
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { createClient } from '@/lib/supabase-client';
@@ -15,7 +15,7 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 2. Add this useEffect hook
+  // This useEffect hook is correct and manages the page's background and scrolling.
   useEffect(() => {
     // When the login page mounts, add our special classes to the body
     document.body.classList.add('login-page-active', 'no-scroll');
@@ -28,7 +28,6 @@ export default function LoginPage() {
   }, []); // The empty array means this effect runs only on mount and unmount
 
   const handleLogin = async (e) => {
-    // ... your existing handleLogin function
     e.preventDefault();
     if (!email || !password) return;
     setError('');

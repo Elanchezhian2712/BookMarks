@@ -72,8 +72,6 @@ export default function Dashboard({ user, initialBookmarks, initialFolders }) {
   const [editingBookmark, setEditingBookmark] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState('newest');
-
-  // *** THE MISSING STATE IS ADDED HERE ***
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -152,57 +150,51 @@ export default function Dashboard({ user, initialBookmarks, initialFolders }) {
   };
 
 
-const handleCopy = (textToCopy, event) => {
-  const button = event.currentTarget;
-  const originalIcon = button.innerHTML;
+  const handleCopy = (textToCopy, event) => {
+    const button = event.currentTarget;
+    const originalIcon = button.innerHTML;
 
-  // Try Clipboard API
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(textToCopy).then(() => {
-      button.innerHTML = `<i class="fas fa-check"></i>`;
-      setTimeout(() => {
-        button.innerHTML = originalIcon;
-      }, 1500);
-    }).catch(err => {
-      console.error("Clipboard API failed:", err);
-      fallbackCopy(textToCopy, button, originalIcon);
-    });
-  } else {
-    // Fallback if Clipboard API is not supported
-    fallbackCopy(textToCopy, button, originalIcon);
-  }
-};
-
-// Fallback for non-HTTPS or unsupported browsers
-const fallbackCopy = (text, button, originalIcon) => {
-  const textarea = document.createElement("textarea");
-  textarea.value = text;
-  textarea.style.position = "fixed"; // avoid scroll jump
-  textarea.style.opacity = "0";
-  document.body.appendChild(textarea);
-  textarea.focus();
-  textarea.select();
-
-  try {
-    const success = document.execCommand("copy");
-    if (success) {
-      button.innerHTML = `<i class="fas fa-check"></i>`;
-      setTimeout(() => {
-        button.innerHTML = originalIcon;
-      }, 1500);
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        button.innerHTML = `<i class="fas fa-check"></i>`;
+        setTimeout(() => {
+          button.innerHTML = originalIcon;
+        }, 1500);
+      }).catch(err => {
+        console.error("Clipboard API failed:", err);
+        fallbackCopy(textToCopy, button, originalIcon);
+      });
     } else {
-      alert("Copy command failed");
+      fallbackCopy(textToCopy, button, originalIcon);
     }
-  } catch (err) {
-    console.error("Fallback copy failed:", err);
-    alert("Could not copy text to clipboard.");
-  }
+  };
 
-  document.body.removeChild(textarea);
-};
+  const fallbackCopy = (text, button, originalIcon) => {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.style.position = "fixed";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
 
+    try {
+      const success = document.execCommand("copy");
+      if (success) {
+        button.innerHTML = `<i class="fas fa-check"></i>`;
+        setTimeout(() => {
+          button.innerHTML = originalIcon;
+        }, 1500);
+      } else {
+        alert("Copy command failed");
+      }
+    } catch (err) {
+      console.error("Fallback copy failed:", err);
+      alert("Could not copy text to clipboard.");
+    }
+    document.body.removeChild(textarea);
+  };
 
-  // Main Filtering and Sorting Logic
   const filteredData = useMemo(() => {
     const query = searchQuery.toLowerCase().trim();
     let intermediateBookmarks = query
@@ -262,7 +254,7 @@ const fallbackCopy = (text, button, originalIcon) => {
               <motion.li layout key={folder.id} className={`folder-list__item ${selectedFolder === folder.id && !searchQuery ? 'folder-list__item--active' : ''}`} onClick={() => {
                 setSearchQuery('');
                 setSelectedFolder(folder.id);
-                setIsSidebarOpen(false); // This is where the error was
+                setIsSidebarOpen(false);
               }} style={{ cursor: searchQuery ? 'not-allowed' : 'pointer' }}>
                 <i className="fas fa-folder fa-fw"></i>
                 <span>{folder.name}</span>
@@ -285,8 +277,18 @@ const fallbackCopy = (text, button, originalIcon) => {
         </aside>
 
         <main className="main-content">
+          {/* --- RESPONSIVE OVERLAY --- */}
+          <div 
+              className={`sidebar-overlay ${isSidebarOpen ? 'sidebar-overlay--visible' : ''}`}
+              onClick={() => setIsSidebarOpen(false)}
+          ></div>
+
           <div className="main-content__header">
             <div className="d-flex align-items-center gap-3">
+              {/* --- RESPONSIVE HAMBURGER BUTTON --- */}
+              <button className="sidebar-toggle-btn" onClick={() => setIsSidebarOpen(true)} title="Open Menu">
+                  <i className="fas fa-bars"></i>
+              </button>
               <h2 className="main-content__title">{selectedFolderName}</h2>
             </div>
             <div className="d-flex flex-column align-items-end">
@@ -302,8 +304,6 @@ const fallbackCopy = (text, button, originalIcon) => {
           </div>
 
           <hr style={{ marginBottom: '1.5rem', height: '1px', border: 'none', backgroundColor: '#ccc' }} />
-
-
 
           <AnimatePresence>
             <motion.div key={selectedFolder + viewMode + searchQuery + sortOrder} variants={containerVariants} initial="hidden" animate="visible" className={viewMode === 'grid' ? 'grid-container' : 'list-container'}>

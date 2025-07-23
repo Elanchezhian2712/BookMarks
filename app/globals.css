@@ -11,36 +11,20 @@
   --aurora-glow-end: #b31217;  
 }
 
-/* Light theme (optional) */
-html[data-theme='light'] {
-  --aurora-bg: #f5f5f5;
-  --aurora-surface: #ffffff;
-  --aurora-surface-hover: #f0f0f0;
-  --aurora-text-primary: #111014;
-  --aurora-text-secondary: #6b6b70;
-  --aurora-border: rgba(0, 0, 0, 0.1);
-  --aurora-border-hover: rgba(0, 0, 0, 0.2);
-  --aurora-glow-start: #e52d27;
-  --aurora-glow-end: #b31217;
-}
-
-
-/* In globals.css */
+/* --- Global & Body --- */
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
 }
 
-/* For better layout calculations */
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
-/* --- And REPLACE it with this --- */
 body {
   color: var(--aurora-text-primary);
-  background-image: url('/spiderman-bg.png');
+    background-image: url('/deadpool.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -55,7 +39,6 @@ body::before {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url('/deadpool.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -64,59 +47,19 @@ body::before {
   animation: backgroundFade 10s infinite;
 }
 
-
-/* --- The Keyframes Animation Definition --- */
 @keyframes backgroundFade {
-  0% {
-    opacity: 0; 
-  }
-  25% {
-    opacity: 1; 
-  }
-  50% {
-    opacity: 1; 
-  }
-  75% {
-    opacity: 0; 
-  }
-  100% {
-    opacity: 0; 
-  }
+  0% { opacity: 0; }
+  25% { opacity: 1; }
+  50% { opacity: 1; }
+  75% { opacity: 0; }
+  100% { opacity: 0; }
 }
 
 body.no-scroll {
   overflow: hidden;
 }
 
-
-/* --- Main Layout --- */
-.aurora-layout {
-  display: flex;
-  min-height: 100vh;
-  padding: 1rem;
-  gap: 1rem;
-  align-items: flex-start;
-}
-
-
-/* --- Sidebar with Glass Effect --- */
-.sidebar {
-  width: 260px;
-  flex-shrink: 0;
-  position: sticky;
-  top: 1rem; 
-  background-color: rgba(10, 10, 12, 0.425);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid var(--aurora-border); 
-  border-radius: 16px; 
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
-  height: calc(100vh - 2rem);
-}
-
-
+/* --- Base Component Styles --- */
 .sidebar__header {
   font-size: 1.25rem;
   padding: 0.75rem;
@@ -149,6 +92,7 @@ body.no-scroll {
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease;
+  position: relative; 
 }
 
 .folder-list__item:hover {
@@ -161,6 +105,35 @@ body.no-scroll {
   font-weight: 600;
 }
 
+.folder-list__delete-btn {
+  position: absolute; 
+  right: 0.75rem; 
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--aurora-text-secondary);
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.folder-list__item:hover .folder-list__delete-btn {
+  opacity: 0.7;
+}
+
+.folder-list__item .folder-list__delete-btn:hover {
+  opacity: 1;
+  color: #ffffff; 
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.folder-list__item:first-child .folder-list__delete-btn {
+  display: none;
+}
+
 .sidebar__footer {
   margin-top: auto;
   padding-top: 1rem;
@@ -170,8 +143,6 @@ body.no-scroll {
   gap: 1rem;
 }
 
-
-/* === Search Bar Style === */
 .sidebar__search-input {
   width: 100%;
   padding: 0.65rem 1rem;
@@ -190,67 +161,6 @@ body.no-scroll {
   box-shadow: 0 0 0 3px rgba(229, 45, 39, 0.2);
 }
 
-
-/* --- Main Content Area --- */
-.main-content {
-  flex-grow: 1;
-  background-color: rgba(10, 10, 12, 0.425);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid var(--aurora-border);
-  border-radius: 16px;
-  padding: 1.5rem 2.5rem;
-  min-height: calc(100vh - 2rem);
-}
-
-.main-content__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.main-content__title {
-  font-size: 2rem;
-  font-weight: 700;
-}
-
-/* --- Find and replace this entire block in globals.css --- */
-
-.view-switcher {
-  display: flex;
-  align-items: center; 
-  gap: 4px; 
-  background-color: rgba(255, 255, 255, 0.267);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  padding: 4px;
-  border-radius: 8px;
-  border: 1px solid var(--aurora-border);
-}
-
-.view-switcher button {
-  background: transparent;
-  border: none;
-  color: var(--aurora-text-secondary);
-  padding: 0.6rem; 
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1; 
-}
-
-.view-switcher button.active {
-  background-color: var(--aurora-surface-hover);
-  color: var(--aurora-text-primary);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-
-/* --- Find and DELETE the .view-switcher and .sort-switcher blocks --- */
 .control-group {
   display: flex;
   align-items: center;
@@ -261,8 +171,6 @@ body.no-scroll {
   padding: 4px;
   border-radius: 8px;
   border: 1px solid var(--aurora-border);
-  margin-top: 16px;
-  
 }
 
 .control-group button {
@@ -285,49 +193,12 @@ body.no-scroll {
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* New style for the separator line */
 .control-group__separator {
   width: 1px;
   height: 16px; 
   background-color: var(--aurora-border);
   margin: 0 4px;
 }
-
-
-/* === ADD THIS to globals.css === */
-.sort-switcher {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  
-  background-color: rgba(24, 22, 28, 0.7);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  padding: 4px;
-  border-radius: 8px;
-  border: 1px solid var(--aurora-border);
-}
-
-.sort-switcher button {
-  background: transparent;
-  border: none;
-  color: var(--aurora-text-secondary);
-  padding: 0.6rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-}
-
-.sort-switcher button.active {
-  background-color: var(--aurora-surface-hover);
-  color: var(--aurora-text-primary);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
 
 /* --- Command Bar (Cmd+K) --- */
 .command-bar-overlay {
@@ -339,7 +210,7 @@ body.no-scroll {
   justify-content: center;
   align-items: center; 
   padding: 1rem;
-  z-index: 1000;
+  z-index: 1001; /* Must be higher than sidebar */
 }
 
 .command-bar {
@@ -354,14 +225,12 @@ body.no-scroll {
   flex-direction: column;
 }
 
-/* New style for the form container */
 .command-bar__form-body {
   padding: 0.5rem;
   display: flex;
   flex-direction: column;
 }
 
-/* New "list-item" style for inputs */
 .command-bar__input {
   width: 100%;
   background: transparent;
@@ -379,19 +248,16 @@ body.no-scroll {
   color: var(--aurora-text-secondary);
 }
 
-/* Remove border from the last input */
 .command-bar__form-body > *:last-child {
   border-bottom: none;
 }
 
-/* New style for the action area at the bottom */
 .command-bar__actions {
   padding: 1rem 1.5rem;
   text-align: right;
   border-top: 1px solid var(--aurora-border);
 }
 
-/* New style for the red "pill" button */
 .command-bar__submit-btn {
   background: var(--aurora-glow-start);
   color: white;
@@ -407,54 +273,14 @@ body.no-scroll {
   transform: scale(1.05);
 }
 
-
-
-/* === ADD THIS to app/globals.css === */
-.folder-list__item {
-  position: relative; 
-}
-
-.folder-list__delete-btn {
-  position: absolute; 
-  right: 0.75rem; 
-  top: 50%;
-  transform: translateY(-50%);
-
-  background: none;
-  border: none;
-  color: var(--aurora-text-secondary);
-  padding: 0.5rem;
-  border-radius: 6px;
-  cursor: pointer;
-  opacity: 0;
-  transition: all 0.2s ease;
-}
-
-/* Show the button when hovering over the folder item */
-.folder-list__item:hover .folder-list__delete-btn {
-  opacity: 0.7;
-}
-
-.folder-list__item .folder-list__delete-btn:hover {
-  opacity: 1;
-  color: #ffffff; 
-  background-color: rgba(239, 68, 68, 0.1);
-}
-
-/* Don't show delete button for the "All Bookmarks" item */
-.folder-list__item:first-child .folder-list__delete-btn {
-  display: none;
-}
-
-
-/* --- Grid View Card with Glass Effect --- */
+/* --- Grid & List View Styles --- */
 .grid-container {
   display: grid;
   gap: 1.5rem;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 .aurora-card {
-  background-color: rgba(18, 18, 18, 0.6); /* Slightly different transparency */
+  background-color: rgba(18, 18, 18, 0.6);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--aurora-border);
@@ -471,7 +297,6 @@ body.no-scroll {
   background-color: rgba(136, 23, 23, 0.514);
 }
 
-/* --- List View Item with Glass Effect on Hover --- */
 .list-container {
   display: flex;
   flex-direction: column;
@@ -492,15 +317,43 @@ body.no-scroll {
   border-color: var(--aurora-border);
 }
 
-.aurora-card__description, .aurora-list-item__description {
+.aurora-card__description-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem; 
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem; 
+}
+
+.aurora-card__description {
+  margin-top: 0;
   font-size: 0.9rem;
   color: var(--aurora-text-secondary);
-  margin-top: 0.5rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   flex-grow: 1;
+}
+
+.aurora-card__copy-btn {
+  background: none;
+  border: none;
+  color: var(--aurora-text-secondary);
+  padding: 0.25rem;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: all 0.2s ease;
+}
+
+.aurora-card:hover .aurora-card__copy-btn {
+  opacity: 1; 
+}
+
+.aurora-card__copy-btn:hover {
+  background-color: var(--aurora-surface-hover);
+  color: var(--aurora-text-primary);
 }
 
 .aurora-card__footer {
@@ -548,149 +401,197 @@ body.no-scroll {
   color: var(--aurora-text-primary);
 }
 
-.aurora-list-item__icon {
-  color: var(--aurora-text-secondary);
-  margin-right: 1.25rem;
-}
-.aurora-list-item__content {
-  flex-grow: 1;
-  overflow: hidden;
-}
-.aurora-list-item__title {
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.aurora-list-item__link {
-  font-size: 0.85rem;
-  color: var(--aurora-text-secondary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.aurora-list-item .aurora-actions {
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-.aurora-list-item:hover .aurora-actions {
-  opacity: 1;
-}
+.aurora-list-item__icon { color: var(--aurora-text-secondary); margin-right: 1.25rem; }
+.aurora-list-item__content { flex-grow: 1; overflow: hidden; }
+.aurora-list-item__title { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.aurora-list-item__link { font-size: 0.85rem; color: var(--aurora-text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.aurora-list-item .aurora-actions { opacity: 0; transition: opacity 0.2s ease; }
+.aurora-list-item:hover .aurora-actions { opacity: 1; }
 
+/* --- Other Components & Login Page --- */
+.user-info { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.user-info span { font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--aurora-text-secondary); }
+.btn { border: none; cursor: pointer; border-radius: 6px; }
 
-/* === ADD THIS to app/globals.css === */
+.glass-login-page { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 1rem; background-size: cover; background-position: center; }
+.glass-login-card { width: 100%; max-width: 420px; text-align: center; background: rgba(10, 10, 12, 0.425); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(252, 2, 2, 0.1); border-radius: 20px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); padding: 2rem 1.5rem; }
+.glass-logo { color: #fff; margin-bottom: 2rem; }
+.glass-title { font-size: 1.75rem; font-weight: 600; color: #f5f5f5; margin-bottom: 2.5rem; }
+.glass-input { width: 90%; padding: 1rem; font-size: 1rem; border-radius: 12px; border: none; background-color: #e8e8f0; color: #111; text-align: left; }
+.glass-input::placeholder { color: #999; opacity: 1; }
+.glass-button { width: 100%; padding: 1rem; font-size: 1rem; font-weight: 600; color: #ffffff; background-color: #ff0000; border: 1px solid rgb(255, 255, 255); border-radius: 12px; cursor: pointer; margin-top: 1.5rem; transition: all 0.2s ease; }
+.glass-button:hover { background-color: #000000; box-shadow: 0 4px 20px rgb(0, 0, 0); color: #ffffff; }
 
-.aurora-card__description-wrapper {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem; 
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem; 
-}
+/* ============================================== */
+/* === RESPONSIVE DESIGN & MOBILE-FIRST STYLES === */
+/* ============================================== */
 
-.aurora-card__description {
-  margin-top: 0;
-}
-
-.aurora-card__copy-btn {
+/* --- Sidebar Toggle "Hamburger" Button (Mobile Only) --- */
+.sidebar-toggle-btn {
   background: none;
-  border: none;
-  color: var(--aurora-text-secondary);
-  padding: 0.25rem;
-  border-radius: 4px;
-  cursor: pointer;
-  opacity: 0.5;
-  transition: all 0.2s ease;
-}
-
-.aurora-card:hover .aurora-card__copy-btn {
-  opacity: 1; 
-}
-
-.aurora-card__copy-btn:hover {
-  background-color: var(--aurora-surface-hover);
+  border: 1px solid var(--aurora-border);
   color: var(--aurora-text-primary);
+  padding: 0.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+.sidebar-toggle-btn:hover {
+  background-color: var(--aurora-surface-hover);
 }
 
-/* --- Theme Switcher --- */
-.theme-switcher {
+/* --- Sidebar Overlay (Mobile Only) --- */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+}
+.sidebar-overlay--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* --- MOBILE-FIRST BASE STYLES (< 768px) --- */
+.aurora-layout {
+  padding: 0.5rem;
+  gap: 0.5rem;
+  display: block;
+  position: relative;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100vh;
+  width: 280px;
+  max-width: 85%;
+  z-index: 1000;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  border-radius: 0;
+  border-right: 1px solid var(--aurora-border);
+  border-left: none;
+  border-top: none;
+  border-bottom: none;
+  background-color: rgba(10, 10, 12, 0.6); /* Slightly more opaque for readability */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   display: flex;
-  width: 100%;
-  background-color: var(--aurora-surface);
-  padding: 4px;
-  border-radius: 8px;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.sidebar--open {
+  transform: translateX(0);
+}
+
+.main-content {
+  padding: 1rem 1rem;
+  border-radius: 12px;
+  min-height: calc(100vh - 1rem);
+  background-color: rgba(10, 10, 12, 0.425);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   border: 1px solid var(--aurora-border);
 }
 
-.theme-switcher button {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: var(--aurora-text-secondary);
-  padding: 0.35rem 0.5rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.theme-switcher button.active {
-  background-color: var(--aurora-bg);
-  color: var(--aurora-text-primary);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-
-.user-info {
+.main-content__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
-.user-info span {
-  font-size: 0.85rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: var(--aurora-text-secondary);
+.main-content__title {
+  font-size: 1.5rem;
 }
 
-/* --- Shared Components --- */
-.btn { border: none; cursor: pointer; border-radius: 6px; }
-
-.btn-primary {
-  background: linear-gradient(90deg, var(--aurora-glow-start), var(--aurora-glow-end));
-  color: white;
-  font-weight: 600;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.btn-primary:hover {
-  transform: scale(1.03);
-  box-shadow: 0 5px 20px rgba(229, 45, 39, 0.3); 
+/* Hide the "Cmd+K" hint on mobile */
+.main-content__header .text-secondary.small {
+  display: none;
 }
 
-.form-control {
-  background: var(--aurora-surface);
-  border: 1px solid var(--aurora-border);
-  border-radius: 6px;
-  color: var(--aurora-text-primary);
-  padding: 0.75rem 1rem;
-  width: 100%;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+.control-group {
+  margin-top: 0;
 }
 
-.form-control:focus {
-  outline: none;
-  border-color: var(--aurora-glow-end);
-  box-shadow: 0 0 0 3px rgba(230, 11, 3, 0.3); 
+
+/* --- TABLET, DESKTOP, AND LARGE SCREEN STYLES (>= 768px) --- */
+@media (min-width: 768px) {
+  .aurora-layout {
+    display: flex;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .sidebar {
+    position: sticky;
+    top: 1rem;
+    height: calc(100vh - 2rem);
+    transform: translateX(0);
+    z-index: auto;
+    border-radius: 16px;
+    border: 1px solid var(--aurora-border);
+    width: 260px;
+    max-width: none;
+    flex-shrink: 0;
+  }
+
+  .sidebar-toggle-btn,
+  .sidebar-overlay {
+    display: none;
+  }
+  
+  .main-content {
+    flex-grow: 1;
+    padding: 1.5rem 2.5rem;
+    border-radius: 16px;
+    min-height: calc(100vh - 2rem);
+  }
+  
+  .main-content__title {
+    font-size: 2rem;
+  }
+
+  .main-content__header .text-secondary.small {
+    display: block;
+  }
 }
 
-/* === NEW "GLASSMORPHISM" LOGIN PAGE STYLES === */
+/* -------------------------------------------login page */
+
+/* === RESPONSIVE "GLASSMORPHISM" LOGIN PAGE STYLES === */
+
+/* This class is added by the component to apply a specific background */
+body.login-page-active {
+  /* You can set a specific background for the login page here */
+  /* For example: background-image: url('/login-background.jpg'); */
+  background-color: #1a1a1d; /* A dark background for the page */
+}
+
 .glass-login-page {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: 1rem;
+  padding: 1rem; /* Crucial for spacing on mobile screen edges */
   background-size: cover;
   background-position: center;
 }
@@ -699,51 +600,58 @@ body.no-scroll {
   width: 100%;
   max-width: 420px; 
   text-align: center;
-  background: rgba(10, 10, 12, 0.425); 
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(252, 2, 2, 0.1); 
+  background: rgba(10, 10, 12, 0.7); /* More opaque for better text contrast */
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid var(--aurora-border); 
   border-radius: 20px; 
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  padding: 3rem;
+  padding: 2.5rem; /* Default padding for larger screens */
 }
 
-.glass-logo {
-  color: #fff;
-  margin-bottom: 2rem;
+/* On smaller screens, reduce the padding for a better fit */
+@media (max-width: 480px) {
+  .glass-login-card {
+    padding: 2rem 1.5rem;
+  }
 }
 
 .glass-title {
   font-size: 1.75rem;
   font-weight: 600;
-  color: #f5f5f5;
-  margin-bottom: 2.5rem; 
+  color: var(--aurora-text-primary);
+  margin-bottom: 2rem; 
 }
 
+/* Defines the space between inputs */
 .glass-input-group {
-  margin-bottom: 1.5rem; 
+  margin-bottom: 1.25rem;
+  position: relative;
 }
 
 .glass-input {
-  width: 90%;
+  /* This is the key fix: Use 100% width to fill the padded parent */
+  width: 100%; 
   padding: 1rem;
   font-size: 1rem;
   border-radius: 12px;
-  border: none;
-  background-color: #e8e8f0;
-  color: #111;
+  border: 1px solid var(--aurora-border);
+  background-color: rgba(255, 255, 255, 0.1); /* Themed input background */
+  color: var(--aurora-text-primary);
   text-align: left;
+  transition: all 0.2s ease;
 }
 
-/* Corrected placeholder styles */
 .glass-input::placeholder {
-  color: #999; 
+  color: var(--aurora-text-secondary); 
   opacity: 1;
 }
 
 .glass-input:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(13, 76, 76, 0.5); 
+  border-color: var(--aurora-glow-end);
+  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 3px rgba(229, 45, 39, 0.3); /* Themed focus ring */
 }
 
 .glass-button {
@@ -752,18 +660,18 @@ body.no-scroll {
   font-size: 1rem;
   font-weight: 600;
   color: #ffffff;
-  background-color: #ff0000; 
-  border: 1px solid rgb(255, 255, 255); 
+  /* Use the theme's gradient for the button */
+  background: linear-gradient(90deg, var(--aurora-glow-start), var(--aurora-glow-end));
+  border: none;
   border-radius: 12px;
   cursor: pointer;
-  margin-top: 1.5rem;
+  margin-top: 1rem; /* Space after the last input/error message */
   transition: all 0.2s ease;
 }
 
 .glass-button:hover {
-  background-color: #000000; 
-  box-shadow: 0 4px 20px rgb(0, 0, 0);
-   color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(229, 45, 39, 0.4);
 }
 
 .glass-button:active {
@@ -771,7 +679,9 @@ body.no-scroll {
 }
 
 .glass-button:disabled {
-  background-color: #333;
+  background: #333;
   color: #666;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
